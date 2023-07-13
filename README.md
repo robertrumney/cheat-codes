@@ -18,7 +18,8 @@ The Cheat Code Input System is a simple script for Unity that allows you to impl
    - Customize the behavior by assigning UnityEvents to the `On Cheat Activated` and `On Cheat Deactivated` events.
 4. Build and run your game.
 5. Players can now enter the specified key sequences during gameplay to activate or deactivate cheats.
-
+6. I personally don't like to perform any unneccesary processing during gameplay time for performance reasons, so I reccomend adding the cheat code input to your main menu scene although it can be used during gameplay if desired.
+   
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
