@@ -6,6 +6,7 @@ public class CheatsInput : MonoBehaviour
     [System.Serializable]
     public class CheatCode
     {
+        public bool saveCheat;           // Wether or not to save the cheat state to PlayerPrefs
         public string cheatKey;          // PlayerPrefs key for storing cheat state
         public KeyCode[] sequence;       // Array of key codes representing the cheat sequence
         public UnityEvent onCheatActivated;   // Event invoked when the cheat is activated
@@ -17,7 +18,26 @@ public class CheatsInput : MonoBehaviour
     private int currentCodeIndex = -1;   // Index of the currently entered cheat code
     private int currentSequenceIndex = 0; // Index to track the current position in the cheat sequence
 
-    void Update()
+    private void Start()
+    {
+        foreach (CheatCode cheat in cheatCodes)
+        {
+            if (cheat.saveCheat)
+            {
+                int savedState = PlayerPrefs.GetInt(cheat.cheatKey, 0);
+                if (savedState == 1)
+                {
+                    cheat.onCheatActivated?.Invoke();
+                }
+                else
+                {
+                    cheat.onCheatDeactivated?.Invoke();
+                }
+            }
+        }
+    }
+    
+    private void Update()
     {
         // Check for key presses
         foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode)))
@@ -31,7 +51,7 @@ public class CheatsInput : MonoBehaviour
         }
     }
 
-    void PressKey(KeyCode k)
+    private void PressKey(KeyCode k)
     {
         if (currentCodeIndex < 0)
         {
@@ -70,7 +90,7 @@ public class CheatsInput : MonoBehaviour
         }
     }
 
-    void ActivateCheat(CheatCode cheatCode)
+    private void ActivateCheat(CheatCode cheatCode)
     {
         // Toggle the cheat state in PlayerPrefs
         int currentState = PlayerPrefs.GetInt(cheatCode.cheatKey, 0);
